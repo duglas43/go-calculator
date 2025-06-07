@@ -1,0 +1,57 @@
+definitions:
+  executor.ExecuteRequest:
+    properties:
+      instructions:
+        items:
+          $ref: '#/definitions/executor.Instruction'
+        type: array
+    type: object
+  executor.Instruction:
+    properties:
+      left: {}
+      op:
+        type: string
+      right: {}
+      type:
+        $ref: '#/definitions/executor.InstructionType'
+      var:
+        type: string
+    type: object
+  executor.InstructionType:
+    enum:
+    - calc
+    - print
+    type: string
+    x-enum-varnames:
+    - CalcType
+    - PrintType
+  executor.Result:
+    properties:
+      value:
+        type: integer
+      var:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /execute:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Instruction list
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/executor.ExecuteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/executor.Result'
+      summary: Execute instructions
+swagger: "2.0"
